@@ -1,15 +1,22 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+[RequireComponent(typeof(BoxCollider2D))]
 public class Coin : MonoBehaviour
 {
-    private SpriteRenderer spriteRenderer;
     void Start()
     {
-        spriteRenderer = gameObject.AddComponent<SpriteRenderer>();
+        gameObject.transform.position = new Vector3(14, -2.5f, 0);
+
+        var spriteRenderer = gameObject.AddComponent<SpriteRenderer>();
         spriteRenderer.sprite = Resources.Load<Sprite>("arconsis-logo");
 
-        gameObject.transform.position = new Vector3(14, 5, 0);
-        gameObject.AddComponent<BoxCollider2D>().size = new Vector2(3,3);
+        var boxCollider = gameObject.GetComponent<BoxCollider2D>();
+        boxCollider.size = new Vector2(3,3);
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        Destroy(gameObject);
     }
 }
