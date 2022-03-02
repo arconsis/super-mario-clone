@@ -8,6 +8,8 @@ public class GameManager : MonoBehaviour
     private GameObject playerObject;
     private GameObject coinObject;
 
+    public int points = 0;
+
     void Start()
     {
         ConfigureCamera();
