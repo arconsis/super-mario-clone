@@ -7,9 +7,35 @@ public class GameManager : MonoBehaviour
     private new Camera camera;
     private GameObject playerObject;
     private GameObject coinObject;
-    private GameObject floor;
 
+    private Color backgroundColor = new Color32(142, 253, 130, 1);
     public int points = 0;
+
+    enum CreationType {
+        Row,
+        Stair
+    }
+
+    void CreateItems(CreationType type, Vector2 startPosition, int count)
+    {
+        switch (type)
+        {
+            case CreationType.Row:
+                for (int i = 0; i < count; i++)
+                {
+                    var cube = new GameObject("Cube");
+                    cube.AddComponent<Cube>();
+                    cube.transform.position = new Vector2(startPosition.x + cube.transform.localScale.x * i, startPosition.y);
+                }
+                break;
+            case CreationType.Stair:
+                for (int i = 0; i < count; i++)
+                {
+                    CreateItems(CreationType.Row, new Vector2(startPosition.x + i, startPosition.y + i), count - i);
+                }
+                break;
+        }
+    }
 
     void Start()
     {
@@ -17,21 +43,20 @@ public class GameManager : MonoBehaviour
 
         playerObject = new GameObject("Player");
         playerObject.AddComponent<Player>();
-        
+        playerObject.transform.position = new Vector3(0, 1, 0);
+
         coinObject = new GameObject("Coin");
         coinObject.AddComponent<Coin>();
-        coinObject.transform.position = new Vector3(40, 0, 0);
+        coinObject.transform.position = new Vector3(20, 3, 0);
 
-        floor = new GameObject("Floor");
-        //floor.transform.position = new Vector2(0, 0);
-        floor.transform.localScale = new Vector2(200, .1f);
-        floor.transform.position = new Vector2(floor.transform.localScale.x / 2, floor.transform.localScale.y / 2);
-        floor.AddComponent<BoxCollider2D>();
+        CreateItems(CreationType.Row, new Vector2(0, 0), 25);
+        CreateItems(CreationType.Row, new Vector2(30, 0), 25);
+        CreateItems(CreationType.Stair, new Vector2(20, 1), 5);
     }
 
     private void ConfigureCamera() {
         camera = GetComponent<Camera>();
-        camera.backgroundColor = Color.black;
+        camera.backgroundColor = backgroundColor;
         camera.orthographicSize = 10;
         camera.transform.position = new Vector3(camera.orthographicSize * camera.aspect, camera.orthographicSize, -100);
     }
@@ -40,8 +65,6 @@ public class GameManager : MonoBehaviour
     {
         var targetVector = new Vector3(playerObject.transform.position.x, camera.transform.position.y, camera.transform.position.z);
         if (playerObject.transform.position.x < camera.orthographicSize * camera.aspect) { return; }
-        //camY = Mathf.Clamp(playerObject.tra)
         camera.transform.position = Vector3.Lerp(camera.transform.position, targetVector, 0.5f);
-        //camera.transform.position = targetVector;
     }
 }
