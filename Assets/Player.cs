@@ -14,12 +14,14 @@ public class Player : MonoBehaviour
         gm = FindObjectOfType<GameManager>();
         spriteRenderer = gameObject.AddComponent<SpriteRenderer>();
         rb = gameObject.AddComponent<Rigidbody2D>();
-        
+        rb.freezeRotation = true;
         gameObject.AddComponent<Movement>();
 
         spriteRenderer.sprite = Resources.Load<Sprite>("player");
-        gameObject.AddComponent<BoxCollider2D>().size = new Vector2(2, 4);
+        var boxCollider = gameObject.AddComponent<BoxCollider2D>();
 
+        boxCollider.size = spriteRenderer.size;
+        boxCollider.offset = spriteRenderer.sprite.bounds.center;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)

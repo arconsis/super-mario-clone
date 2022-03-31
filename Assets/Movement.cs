@@ -21,14 +21,11 @@ public class Movement : MonoBehaviour
     void Update()
     {
         var horizontal = Input.GetAxis("Horizontal") * speed;
-        horizontal *= Time.deltaTime;
+        rb.velocity = new Vector2(horizontal, rb.velocity.y);
 
-        gameObject.transform.Translate(new Vector3(horizontal, 0, 0));
-
-        if (jumpCount < 2 && (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.P))) {
-
+        if (jumpCount < 2 && (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.P)))
+        {
             jumpCount++;
-
             rb.AddForce(Vector2.up * jump, ForceMode2D.Impulse);
         }
     }
