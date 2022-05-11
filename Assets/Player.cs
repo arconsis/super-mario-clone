@@ -15,7 +15,9 @@ public class Player : MonoBehaviour
         spriteRenderer = gameObject.AddComponent<SpriteRenderer>();
         rb = gameObject.AddComponent<Rigidbody2D>();
         rb.freezeRotation = true;
+        rb.gravityScale = 0;
         gameObject.AddComponent<Movement>();
+        gameObject.AddComponent<TransformJump>();
 
         spriteRenderer.sprite = Resources.Load<Sprite>("player");
         var boxCollider = gameObject.AddComponent<BoxCollider2D>();
